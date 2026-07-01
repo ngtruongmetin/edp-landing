@@ -3,6 +3,7 @@ import Hero from './components/Hero'
 import Features from './components/Features'
 import Pricing from './components/Pricing'
 import Footer from './components/Footer'
+import { CONTACT_EMAIL_HREF, CONTACT_PHONE_HREF } from './config/contact'
 
 const workflowSteps = [
     {
@@ -171,9 +172,15 @@ export default function App() {
                                 Mỗi trường có quy chế và cách vận hành khác nhau. Chúng tôi sẽ khảo sát,
                                 tư vấn và triển khai EduDiscipline Platform theo đúng nhu cầu thực tế của đơn vị.
                             </p>
+
                         </div>
                         <div className="cta-actions">
-                            <button className="btn-primary">Liên hệ tư vấn</button>
+                            <a className="btn-primary" href={CONTACT_EMAIL_HREF}>
+                                Liên hệ tư vấn
+                            </a>
+                            <a className="btn-ghost" href={CONTACT_PHONE_HREF}>
+                                Gọi ngay
+                            </a>
                         </div>
                     </div>
                 </section>
