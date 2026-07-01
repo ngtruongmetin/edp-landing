@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 const features = [
     {
@@ -24,10 +24,47 @@ const features = [
 ]
 
 export default function Features() {
+    const sectionRef = useRef(null)
+    const [isVisible, setIsVisible] = useState(false)
+
+    useEffect(() => {
+        const element = sectionRef.current
+
+        if (!element) {
+            return undefined
+        }
+
+        if (typeof IntersectionObserver === 'undefined') {
+            setIsVisible(true)
+            return undefined
+        }
+
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    setIsVisible(true)
+                    observer.disconnect()
+                }
+            },
+            {
+                threshold: 0.2,
+                rootMargin: '0px 0px -10% 0px',
+            },
+        )
+
+        observer.observe(element)
+
+        return () => observer.disconnect()
+    }, [])
+
     return (
-        <div className="features-grid">
+        <div ref={sectionRef} className={`features-grid ${isVisible ? 'is-visible' : ''}`}>
             {features.map((feature, index) => (
-                <article className="feature" key={feature.title}>
+                <article
+                    className="feature"
+                    key={feature.title}
+                    style={{ '--feature-delay': `${index * 120}ms` }}
+                >
                     <div className="feature-index">0{index + 1}</div>
                     <h3>{feature.title}</h3>
                     <p>{feature.description}</p>

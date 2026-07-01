@@ -4,21 +4,35 @@ import { CONTACT_EMAIL_HREF } from '../config/contact'
 const highlights = [
     'Số hóa toàn bộ quy trình thi đua cờ đỏ',
     'Tự động tính điểm và xếp hạng theo quy chế',
-    'Triển khai riêng theo nghiệp vụ từng trường'
+    'Triển khai riêng theo nghiệp vụ từng trường',
 ]
 
 const dashboardCards = [
     { label: 'Lớp đang quản lý', value: 41, suffix: '', tone: 'accent' },
     { label: 'Phiếu trực đã xử lý', value: 1458, suffix: '', tone: 'success' },
-    { label: 'Ngày vận hành', value: 97, suffix: '', tone: 'neutral' }
+    { label: 'Ngày vận hành', value: 97, suffix: '', tone: 'neutral' },
 ]
 
-function useCountUp(target, duration = 1500) {
+function useCountUp(target, duration = 1500, active = false) {
     const [value, setValue] = useState(0)
     const frameRef = useRef(0)
 
+    useEffect(
+        () => () => {
+            window.cancelAnimationFrame(frameRef.current)
+        },
+        [],
+    )
+
     useEffect(() => {
         const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+        window.cancelAnimationFrame(frameRef.current)
+
+        if (!active) {
+            setValue(0)
+            return undefined
+        }
 
         if (reducedMotion) {
             setValue(target)
@@ -41,23 +55,44 @@ function useCountUp(target, duration = 1500) {
         frameRef.current = window.requestAnimationFrame(animate)
 
         return () => window.cancelAnimationFrame(frameRef.current)
-    }, [target, duration])
+    }, [active, target, duration])
 
     return value
 }
 
-function AnimatedCard({ card, delay = 0 }) {
-    const count = useCountUp(card.value, 1400 + card.value * 2)
+function AnimatedCard({ card, delay = 0, active = false }) {
+    const count = useCountUp(card.value, 1400 + card.value * 2, active)
 
     return (
         <div className={`mock-card ${card.tone}`} style={{ '--card-delay': `${delay}ms` }}>
-            <div className="mock-value">{count}{card.suffix}</div>
+            <div className="mock-value">
+                {count}
+                {card.suffix}
+            </div>
             <div className="mock-label">{card.label}</div>
         </div>
     )
 }
 
 export default function Hero() {
+    const isMobile = window.matchMedia('(max-width: 720px)').matches
+    const [isVisible, setIsVisible] = useState(() => !isMobile)
+
+    useEffect(() => {
+        if (!isMobile) {
+            setIsVisible(true)
+            return undefined
+        }
+
+        const markVisible = () => {
+            setIsVisible(true)
+            window.removeEventListener('scroll', markVisible)
+        }
+
+        window.addEventListener('scroll', markVisible, { passive: true })
+        return () => window.removeEventListener('scroll', markVisible)
+    }, [isMobile])
+
     return (
         <header className="hero" role="banner">
             <div className="hero-backdrop" aria-hidden="true" />
@@ -78,7 +113,9 @@ export default function Hero() {
                     </ul>
 
                     <div className="hero-cta">
-                        <a className="btn-primary" href={CONTACT_EMAIL_HREF}>Liên hệ tư vấn</a>
+                        <a className="btn-primary" href={CONTACT_EMAIL_HREF}>
+                            Liên hệ tư vấn
+                        </a>
                         <a className="btn-ghost" href="#benefits">
                             Xem tính năng
                         </a>
@@ -99,7 +136,7 @@ export default function Hero() {
                             </div>
                             <div className="mock-stats">
                                 {dashboardCards.map((card, index) => (
-                                    <AnimatedCard key={card.label} card={card} delay={index * 140} />
+                                    <AnimatedCard key={card.label} card={card} delay={index * 140} active={isVisible} />
                                 ))}
                             </div>
                             <div className="mock-panel mock-panel-secondary">

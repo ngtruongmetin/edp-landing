@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Hero from './components/Hero'
 import Features from './components/Features'
 import Pricing from './components/Pricing'
@@ -32,6 +32,50 @@ const workflowSteps = [
 ]
 
 export default function App() {
+    const workflowRefs = useRef([])
+    const [visibleWorkflowSteps, setVisibleWorkflowSteps] = useState([])
+    const workflowMaxVisible = visibleWorkflowSteps.length > 0 ? Math.max(...visibleWorkflowSteps) : -1
+
+    useEffect(() => {
+        const elements = workflowRefs.current.filter(Boolean)
+
+        if (elements.length === 0) {
+            return undefined
+        }
+
+        if (typeof IntersectionObserver === 'undefined') {
+            setVisibleWorkflowSteps(workflowSteps.map((_, index) => index))
+            return undefined
+        }
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (!entry.isIntersecting) {
+                        return
+                    }
+
+                    const index = Number(entry.target.getAttribute('data-workflow-index'))
+
+                    if (Number.isNaN(index)) {
+                        return
+                    }
+
+                    setVisibleWorkflowSteps((current) => (current.includes(index) ? current : [...current, index]))
+                    observer.unobserve(entry.target)
+                })
+            },
+            {
+                threshold: 0.28,
+                rootMargin: '0px 0px -8% 0px',
+            },
+        )
+
+        elements.forEach((element) => observer.observe(element))
+
+        return () => observer.disconnect()
+    }, [])
+
     return (
         <div className="app-root">
             <Hero />
@@ -63,16 +107,50 @@ export default function App() {
                         <h2 id="workflow" className="section-title">Luồng vận hành từ đầu tuần đến báo cáo cuối tuần</h2>
                     </div>
                     <div className="workflow-flow" role="list" aria-label="Quy trình thực hiện">
+                        <div
+                            className="workflow-track"
+                            aria-hidden="true"
+                            style={{
+                                '--workflow-progress':
+                                    workflowMaxVisible >= 0
+                                        ? `${(workflowMaxVisible / Math.max(workflowSteps.length - 1, 1)) * 100}%`
+                                        : '0%',
+                            }}
+                        />
                         {workflowSteps.map((step, index) => (
                             <React.Fragment key={step.title}>
-                                <article className="workflow-step" role="listitem">
+                                <article
+                                    ref={(element) => {
+                                        workflowRefs.current[index * 2] = element
+                                    }}
+                                    data-workflow-index={index}
+                                    className={`workflow-step ${visibleWorkflowSteps.includes(index) ? 'is-visible' : ''}`}
+                                    role="listitem"
+                                    style={{
+                                        '--workflow-delay': `${index * 120}ms`,
+                                        '--workflow-offset': index % 2 === 0 ? '-26px' : '26px',
+                                    }}
+                                >
                                     <div className="workflow-step-index">0{index + 1}</div>
                                     <div className="workflow-step-copy">
                                         <h3>{step.title}</h3>
                                         <p>{step.description}</p>
                                     </div>
                                 </article>
-                                {index < workflowSteps.length - 1 ? <div className="workflow-arrow" aria-hidden="true">↓</div> : null}
+                                {index < workflowSteps.length - 1 ? (
+                                    <div
+                                        ref={(element) => {
+                                            workflowRefs.current[index * 2 + 1] = element
+                                        }}
+                                        className={`workflow-arrow ${
+                                            visibleWorkflowSteps.includes(index) ? 'is-visible' : ''
+                                        }`}
+                                        aria-hidden="true"
+                                        style={{ '--workflow-delay': `${index * 120 + 70}ms` }}
+                                    >
+                                        ↓
+                                    </div>
+                                ) : null}
                             </React.Fragment>
                         ))}
                     </div>
