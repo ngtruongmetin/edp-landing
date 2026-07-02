@@ -20,7 +20,7 @@ const addOns = [
     },
     {
         icon: '◉',
-        title: 'Nhận diện riêng',
+        title: 'Thiết kế giao diện',
         description: 'Tùy chỉnh logo, màu sắc, tên miền và giao diện riêng theo thương hiệu của nhà trường.'
     },
     {
