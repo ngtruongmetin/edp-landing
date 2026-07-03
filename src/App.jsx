@@ -143,9 +143,8 @@ export default function App() {
                                         ref={(element) => {
                                             workflowRefs.current[index * 2 + 1] = element
                                         }}
-                                        className={`workflow-arrow ${
-                                            visibleWorkflowSteps.includes(index) ? 'is-visible' : ''
-                                        }`}
+                                        className={`workflow-arrow ${visibleWorkflowSteps.includes(index) ? 'is-visible' : ''
+                                            }`}
                                         aria-hidden="true"
                                         style={{ '--workflow-delay': `${index * 120 + 70}ms` }}
                                     >

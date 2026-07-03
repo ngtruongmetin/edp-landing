@@ -9,4 +9,12 @@ npm install
 npm run dev
 ```
 
-This project uses Vite. Open http://localhost:5173 after `npm run dev`.
+Docker:
+
+```bash
+docker compose up --build
+```
+
+Open http://localhost:8080 after the container starts.
+
+Production nginx serves the app on port 80 inside the container and is ready for `edp.io.vn`.
