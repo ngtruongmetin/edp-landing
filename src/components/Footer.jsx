@@ -1,48 +1,6 @@
 import React from 'react'
 import { CONTACT_EMAIL, CONTACT_EMAIL_HREF, CONTACT_PHONE_HREF } from '../config/contact'
 
-const solutionLinks = [
-    { label: 'Giới thiệu', href: '#overview' },
-    { label: 'Tính năng', href: '#benefits' },
-    { label: 'Quy trình', href: '#workflow' },
-    { label: 'Giải pháp', href: '#pricing' }
-]
-
-
-
 export default function Footer() {
-    return (
-        <footer className="site-footer">
-            <div className="container footer-inner">
-                <div className="footer-brand">
-                    <p className="eyebrow">EduDiscipline Platform</p>
-                    <h3>Số hóa công tác thi đua cờ đỏ cho trường THPT.</h3>
-                </div>
-
-                <div className="footer-column">
-                    <h4>Giải pháp</h4>
-                    {solutionLinks.map((item) => (
-                        <a key={item.label} href={item.href}>
-                            {item.label}
-                        </a>
-                    ))}
-                </div>
-
-
-                <div className="footer-column">
-                    <h4>Liên hệ</h4>
-                    <span className="muted">Đường Nguyễn Văn Tiết, Phường Lái Thiêu, Thành phố Hồ Chí Minh, Việt Nam</span>
-                    <a href={CONTACT_EMAIL_HREF}>{CONTACT_EMAIL}</a>
-                    <a href={CONTACT_PHONE_HREF}>+84 865 916 475</a>
-                </div>
-            </div>
-
-            <div className="footer-bottom">
-                <div className="container footer-bottom-inner">
-                    <span className="muted">© {new Date().getFullYear()} EduDiscipline Platform. All rights reserved.</span>
-                    <span className="muted">Nền tảng số hóa công tác thi đua và quản lý nề nếp học đường</span>
-                </div>
-            </div>
-        </footer>
-    )
+  return <footer className="site-footer"><div className="container footer-grid"><div className="footer-main"><a className="brand-lockup" href="#main" aria-label="EduDiscipline Platform, về đầu trang"><img src="/assets/logo.png" alt="" /><span><b>EduDiscipline</b> Platform</span></a><p>Số hóa công tác thi đua và nề nếp học đường theo quy trình của từng trường THPT.</p></div><div className="footer-column"><small>Khám phá</small><a href="#benefits">Nền tảng</a><a href="#workflow">Quy trình</a><a href="#implementation">Cấu hình</a><a href="#faq">FAQ</a></div><div className="footer-column"><small>Liên hệ</small><a href={CONTACT_EMAIL_HREF}>{CONTACT_EMAIL}</a><a href={CONTACT_PHONE_HREF}>+84 865 916 475</a><span>EduDiscipline Platform</span></div></div><div className="container footer-bottom"><span>© {new Date().getFullYear()} EduDiscipline Platform</span><span>Bảo mật · Điều khoản</span><span>Thiết kế cho trường THPT <b>●</b></span></div></footer>
 }

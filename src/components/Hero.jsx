@@ -1,155 +1,112 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useState } from 'react'
 import { CONTACT_EMAIL_HREF } from '../config/contact'
+import ArrowIcon from './ArrowIcon'
 
-const highlights = [
-    'Số hóa toàn bộ quy trình thi đua cờ đỏ',
-    'Tự động tính điểm và xếp hạng theo quy chế',
-    'Triển khai riêng theo nghiệp vụ từng trường',
+const navItems = [
+  ['Nền tảng', '#benefits'],
+  ['Quy trình', '#workflow'],
+  ['Triển khai', '#implementation'],
+  ['FAQ', '#faq'],
 ]
 
-const dashboardCards = [
-    { label: 'Lớp đang quản lý', value: 41, suffix: '', tone: 'accent' },
-    { label: 'Phiếu trực đã xử lý', value: 1458, suffix: '', tone: 'success' },
-    { label: 'Ngày vận hành', value: 97, suffix: '', tone: 'neutral' },
+const heroFlow = [
+  ['01', 'Cờ đỏ', 'Ghi nhận nề nếp'],
+  ['02', 'Phiếu trực', 'Lập phiếu theo quy định'],
+  ['03', 'Ký xác nhận', 'Đối chiếu đúng vai trò'],
+  ['04', 'Tổng kết', 'Tính điểm theo kỳ'],
+  ['05', 'Khóa dữ liệu', 'Niêm phong kết quả'],
+  ['06', 'Xếp hạng', 'Công bố minh bạch'],
 ]
-
-function useCountUp(target, duration = 1500, active = false) {
-    const [value, setValue] = useState(0)
-    const frameRef = useRef(0)
-
-    useEffect(
-        () => () => {
-            window.cancelAnimationFrame(frameRef.current)
-        },
-        [],
-    )
-
-    useEffect(() => {
-        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-
-        window.cancelAnimationFrame(frameRef.current)
-
-        if (!active) {
-            setValue(0)
-            return undefined
-        }
-
-        if (reducedMotion) {
-            setValue(target)
-            return undefined
-        }
-
-        let startTime = 0
-
-        const animate = (timestamp) => {
-            if (!startTime) startTime = timestamp
-            const progress = Math.min((timestamp - startTime) / duration, 1)
-            const eased = 1 - Math.pow(1 - progress, 3)
-            setValue(Math.round(target * eased))
-
-            if (progress < 1) {
-                frameRef.current = window.requestAnimationFrame(animate)
-            }
-        }
-
-        frameRef.current = window.requestAnimationFrame(animate)
-
-        return () => window.cancelAnimationFrame(frameRef.current)
-    }, [active, target, duration])
-
-    return value
-}
-
-function AnimatedCard({ card, delay = 0, active = false }) {
-    const count = useCountUp(card.value, 1400 + card.value * 2, active)
-
-    return (
-        <div className={`mock-card ${card.tone}`} style={{ '--card-delay': `${delay}ms` }}>
-            <div className="mock-value">
-                {count}
-                {card.suffix}
-            </div>
-            <div className="mock-label">{card.label}</div>
-        </div>
-    )
-}
 
 export default function Hero() {
-    const isMobile = window.matchMedia('(max-width: 720px)').matches
-    const [isVisible, setIsVisible] = useState(() => !isMobile)
+  const [menuOpen, setMenuOpen] = useState(false)
+  const closeMenu = () => setMenuOpen(false)
 
-    useEffect(() => {
-        if (!isMobile) {
-            setIsVisible(true)
-            return undefined
-        }
+  return (
+    <header className="site-header">
+      <div className="container nav-shell">
+        <a className="brand-lockup" href="#main" aria-label="EduDiscipline Platform, về đầu trang">
+          <img src="/assets/logo.png" alt="" />
+          <span><b>EduDiscipline</b> Platform</span>
+        </a>
+        <nav id="primary-nav" className={`primary-nav ${menuOpen ? 'is-open' : ''}`} aria-label="Điều hướng chính">
+          {navItems.map(([label, href]) => (
+            <a key={href} href={href} onClick={closeMenu}>{label}</a>
+          ))}
+          <a className="nav-mobile-action arrow-bearing" href={CONTACT_EMAIL_HREF} onClick={closeMenu}>
+            Đặt lịch tư vấn <ArrowIcon />
+          </a>
+        </nav>
+        <a className="nav-action arrow-bearing" href={CONTACT_EMAIL_HREF}>Đặt lịch tư vấn <ArrowIcon /></a>
+        <button
+          className={`menu-toggle ${menuOpen ? 'is-open' : ''}`}
+          type="button"
+          aria-expanded={menuOpen}
+          aria-controls="primary-nav"
+          onClick={() => setMenuOpen((open) => !open)}
+        >
+          <span />
+          <span />
+          <span />
+          <b className="sr-only">{menuOpen ? 'Đóng menu' : 'Mở menu'}</b>
+        </button>
+      </div>
 
-        const markVisible = () => {
-            setIsVisible(true)
-            window.removeEventListener('scroll', markVisible)
-        }
+      <div className="container hero-shell">
+        <div className="hero-copy-new">
+          <div className="status-line"><i /> Quy trình thi đua và nề nếp cho trường THPT</div>
+          <h1>Quy trình rõ. Dữ liệu có dấu vết.</h1>
+          <p>
+            EduDiscipline Platform số hóa toàn bộ luồng thi đua: từ Cờ đỏ ghi nhận, phiếu trực,
+            ký xác nhận, tổng kết, khóa dữ liệu đến xếp hạng. Dashboard chỉ là kết quả cuối cùng
+            của một quy trình được chuẩn hóa.
+          </p>
+          <div className="hero-actions">
+            <a className="button button-primary arrow-bearing" href={CONTACT_EMAIL_HREF}>
+              Đặt lịch tư vấn <ArrowIcon />
+            </a>
+            <a className="button button-quiet arrow-bearing" href="#workflow">
+              Xem quy trình <ArrowIcon direction="down" />
+            </a>
+          </div>
+          <div className="hero-proof">
+            <span><strong>Theo quy chế</strong> cấu hình cho từng trường</span>
+            <span><strong>Có xác nhận</strong> theo vai trò vận hành</span>
+            <span><strong>Có khóa</strong> để bảo toàn kết quả</span>
+          </div>
+        </div>
 
-        window.addEventListener('scroll', markVisible, { passive: true })
-        return () => window.removeEventListener('scroll', markVisible)
-    }, [isMobile])
-
-    return (
-        <header className="hero" role="banner">
-            <div className="hero-backdrop" aria-hidden="true" />
-            <div className="container hero-inner">
-                <div className="hero-copy">
-                    <div className="hero-badge">EduDiscipline Platform</div>
-                    <h1>Số hóa công tác thi đua và quản lý nề nếp học đường</h1>
-                    <p className="lead">
-                        EduDiscipline Platform được phát triển từ nhu cầu thực tế tại trường THPT. Chúng tôi khảo sát quy trình thi đua,
-                        cấu hình hệ thống theo quy chế của từng trường và đồng hành trong quá trình triển khai để mọi bộ phận có thể
-                        sử dụng ngay từ những tuần thi đua đầu tiên.
-                    </p>
-
-                    <ul className="hero-benefits">
-                        {highlights.map((item) => (
-                            <li key={item}>{item}</li>
-                        ))}
-                    </ul>
-
-                    <div className="hero-cta">
-                        <a className="btn-primary" href={CONTACT_EMAIL_HREF}>
-                            Liên hệ tư vấn
-                        </a>
-                        <a className="btn-ghost" href="#benefits">
-                            Xem tính năng
-                        </a>
-                    </div>
-                </div>
-
-                <aside className="hero-visual" aria-hidden="true">
-                    <div className="mock-shell">
-                        <div className="mock-shell-top">
-                            <span className="mock-dot" />
-                            <span className="mock-dot" />
-                            <span className="mock-dot" />
-                        </div>
-                        <div className="mock-dashboard">
-                            <div className="mock-panel mock-panel-primary">
-                                <div className="mock-label">Số liệu thực tế</div>
-                                <div className="mock-title">Trường THPT Nguyễn Trãi - Bình Dương</div>
-                            </div>
-                            <div className="mock-stats">
-                                {dashboardCards.map((card, index) => (
-                                    <AnimatedCard key={card.label} card={card} delay={index * 140} active={isVisible} />
-                                ))}
-                            </div>
-                            <div className="mock-panel mock-panel-secondary">
-                                <div>
-                                    <div className="mock-label">Thời gian bàn giao</div>
-                                    <div className="mock-title">Từ thanh toán đến vận hành</div>
-                                </div>
-                                <div className="mock-chip">7–14 ngày làm việc</div>
-                            </div>
-                        </div>
-                    </div>
-                </aside>
+        <div className="hero-art" role="img" aria-label="Luồng nghiệp vụ từ Cờ đỏ, phiếu trực, ký xác nhận, tổng kết, khóa dữ liệu đến xếp hạng">
+          <div className="process-ledger">
+            <div className="ledger-head">
+              <span>Sổ quy trình thi đua</span>
+              <b>Năm học 2026</b>
             </div>
-        </header>
-    )
+            <ol className="hero-process">
+              {heroFlow.map(([number, title, description], index) => (
+                <li key={title} className={index === heroFlow.length - 1 ? 'is-final' : ''}>
+                  <span className="process-number">{number}</span>
+                  <span className="process-copy">
+                    <b>{title}</b>
+                    <small>{description}</small>
+                  </span>
+                  {index < heroFlow.length - 1 && <ArrowIcon direction="down" className="process-arrow" />}
+                </li>
+              ))}
+            </ol>
+            <div className="ledger-seal">
+              <span>Đã khóa</span>
+              <b>Truy vết được</b>
+            </div>
+          </div>
+          <div className="ranking-slip" aria-hidden="true">
+            <span>Xếp hạng tuần</span>
+            <div><b>10A1</b><i /></div>
+            <div><b>11A3</b><i /></div>
+            <div><b>12A2</b><i /></div>
+          </div>
+        </div>
+      </div>
+    </header>
+  )
 }
