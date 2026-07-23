@@ -1,259 +1,381 @@
 import React, { useEffect, useRef, useState } from 'react'
-import Hero from './components/Hero'
-import Features from './components/Features'
-import Pricing from './components/Pricing'
-import Footer from './components/Footer'
-import ArrowIcon from './components/ArrowIcon'
-import { CONTACT_EMAIL_HREF, CONTACT_PHONE_HREF } from './config/contact'
+import { CONTACT_EMAIL, CONTACT_EMAIL_HREF, CONTACT_PHONE_HREF } from './config/contact'
 
-const workflowSteps = [
-  ['01', 'Cờ đỏ ghi nhận', 'Ghi nhận nề nếp và vi phạm ngay tại lớp theo danh mục lỗi của nhà trường.', 'Đầu vào'],
-  ['02', 'Lập phiếu trực', 'Phiếu trực điện tử gom minh chứng, nội dung, điểm cộng trừ và người thực hiện.', 'Chứng từ'],
-  ['03', 'Ký xác nhận', 'Ban cán sự, giáo viên chủ nhiệm hoặc vai trò liên quan đối chiếu trước khi chốt.', 'Trách nhiệm'],
-  ['04', 'Tổng kết theo kỳ', 'Hệ thống tổng hợp tuần, tháng, học kỳ hoặc năm học theo quy chế đã cấu hình.', 'Tính điểm'],
-  ['05', 'Khóa dữ liệu', 'Kết quả sau rà soát được khóa để giữ nguyên lịch sử và tránh chỉnh sửa tùy tiện.', 'Niêm phong'],
-  ['06', 'Xếp hạng minh bạch', 'Nhà trường xem kết quả, xuất báo cáo và đối chiếu được nguồn dữ liệu.', 'Kết quả'],
+const productCards = [
+  {
+    eyebrow: 'Ghi nhận hằng ngày',
+    title: 'Phiếu trực điện tử',
+    copy: 'Ghi nhận nề nếp, vi phạm và minh chứng ngay tại lớp, theo đúng danh mục của trường.',
+    kind: 'duty',
+  },
+  {
+    eyebrow: 'Theo quy chế riêng',
+    title: 'Điểm thi đua rõ ràng',
+    copy: 'Cấu hình lỗi, điểm cộng trừ và vai trò xác nhận theo cách nhà trường đang vận hành.',
+    kind: 'rules',
+  },
+  {
+    eyebrow: 'Chốt đúng kỳ',
+    title: 'Tổng kết tự động',
+    copy: 'Theo dõi tuần, tháng, học kỳ và năm học từ cùng một nguồn dữ liệu.',
+    kind: 'summary',
+  },
+  {
+    eyebrow: 'Khi cần đối chiếu',
+    title: 'Lịch sử có thể truy vết',
+    copy: 'Mỗi thay đổi, xác nhận và thời điểm khóa dữ liệu đều được lưu lại rõ ràng.',
+    kind: 'history',
+  },
 ]
 
-const governancePoints = [
-  ['Quy chế là gốc', 'Danh mục lỗi, thang điểm, mốc thời gian và quyền xác nhận đi theo quy định của từng trường.'],
-  ['Mỗi bước có người chịu trách nhiệm', 'Phiếu trực, chữ ký, trạng thái tổng kết và lịch sử chỉnh sửa đều có dấu vết.'],
-  ['Kết quả chỉ đáng tin khi dữ liệu đã khóa', 'EDP đặt trọng tâm vào chốt dữ liệu theo chu kỳ trước khi hiển thị xếp hạng.'],
+const workflow = [
+  {
+    title: 'Thiết lập năm học',
+    copy: 'Khai báo lớp, thời gian, quy chế và các vai trò cùng tham gia.',
+  },
+  {
+    title: 'Ghi nhận và xác nhận',
+    copy: 'Cờ đỏ lập phiếu trực. Các vai trò liên quan kiểm tra và ký xác nhận.',
+  },
+  {
+    title: 'Tổng kết đúng kỳ',
+    copy: 'Hệ thống tổng hợp, xếp hạng và khóa dữ liệu sau khi nhà trường rà soát.',
+  },
 ]
 
-const roleCards = [
-  ['Ban giám hiệu', 'Theo dõi nhịp vận hành toàn trường và đối chiếu kết quả theo tuần, tháng, học kỳ.'],
-  ['Giáo viên chủ nhiệm', 'Xem tình hình lớp, kiểm tra phiếu trực và nắm lịch sử vi phạm trước khi trao đổi với học sinh.'],
-  ['Cờ đỏ', 'Nhập phiếu trực nhanh, rõ tiêu chí và giảm sai sót khi ghi nhận nề nếp hằng ngày.'],
-  ['Ban cán sự', 'Phối hợp xác nhận thông tin, theo dõi điểm thi đua và phản hồi khi cần đối chiếu.'],
+const roles = [
+  ['Ban giám hiệu', 'Nắm tình hình toàn trường và đối chiếu kết quả theo từng kỳ.'],
+  ['Giáo viên chủ nhiệm', 'Theo dõi lớp, phiếu trực và lịch sử vi phạm trước khi trao đổi.'],
+  ['Cờ đỏ', 'Lập phiếu nhanh, đủ tiêu chí và có minh chứng khi cần.'],
+  ['Ban cán sự', 'Phối hợp xác nhận, theo dõi điểm thi đua và phản hồi kịp thời.'],
 ]
 
 const faqs = [
   ['EDP có buộc trường thay đổi quy chế không?', 'Không. Hệ thống được cấu hình theo quy chế, danh mục lỗi, thang điểm và luồng xác nhận mà trường đang vận hành.'],
-  ['Khóa dữ liệu có ý nghĩa gì?', 'Khi một kỳ đã được rà soát và khóa, dữ liệu không bị chỉnh sửa tùy tiện. Lịch sử xử lý vẫn được lưu để truy vết.'],
-  ['Dashboard nằm ở đâu trong sản phẩm?', 'Dashboard là lớp xem kết quả sau khi quy trình đã chạy đúng: phiếu trực đã có, xác nhận đã xong, tổng kết đã được chốt.'],
-  ['Có dùng được trên điện thoại không?', 'Có. Trải nghiệm được ưu tiên cho thao tác đơn giản, rõ ràng và phù hợp với người dùng không chuyên kỹ thuật.'],
+  ['Dữ liệu đã khóa có ý nghĩa gì?', 'Sau khi một kỳ được rà soát và khóa, dữ liệu không bị chỉnh sửa tùy tiện. Lịch sử xử lý vẫn được lưu để đối chiếu.'],
+  ['EDP có hỗ trợ sử dụng trên điện thoại không?', 'Có. Những thao tác hằng ngày như lập phiếu trực và kiểm tra thông tin được ưu tiên cho màn hình nhỏ.'],
+  ['Nhà trường có thể xuất báo cáo không?', 'Có. Kết quả tổng kết và thông tin cần đối chiếu có thể được xuất theo nhu cầu vận hành của trường.'],
 ]
 
-function Reveal({ children, className = '', variant = 'rise' }) {
-  const ref = useRef(null)
-  const [shown, setShown] = useState(false)
-
-  useEffect(() => {
-    if (!ref.current || typeof IntersectionObserver === 'undefined') {
-      setShown(true)
-      return undefined
-    }
-
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) setShown(true)
-    }, { threshold: 0.18, rootMargin: '0px 0px -8% 0px' })
-
-    observer.observe(ref.current)
-    return () => observer.disconnect()
-  }, [])
-
-  return <div ref={ref} className={`reveal reveal-${variant} ${shown ? 'is-shown' : ''} ${className}`}>{children}</div>
+function Arrow() {
+  return <span className="button-arrow" aria-hidden="true">&#8594;</span>
 }
 
-function EvidenceBoard() {
+function ProductPreview() {
   return (
-    <div className="evidence-board" aria-label="Minh họa hồ sơ dữ liệu có xác nhận và khóa">
-      <div className="evidence-header">
-        <span>Hồ sơ tuần 14</span>
-        <b>Đã đối chiếu</b>
-      </div>
-      <div className="evidence-lines">
-        <div><span>Phiếu trực</span><b>36 phiếu</b><i /></div>
-        <div><span>Ký xác nhận</span><b>Đủ vai trò</b><i /></div>
-        <div><span>Tổng kết</span><b>Sẵn sàng khóa</b><i /></div>
-      </div>
-      <div className="evidence-lock">
-        <span>Khóa dữ liệu</span>
-        <strong>Không sửa sau khi chốt</strong>
-      </div>
+    <div className="preview-rail" aria-label="Minh họa giao diện EduDiscipline Platform">
+      <section className="preview-card preview-card--duty">
+        <div className="preview-topbar">
+          <span className="preview-chip">Phiếu trực</span>
+          <span className="preview-state">Đã gửi</span>
+        </div>
+        <h3>Ca trực hôm nay</h3>
+        <p>Khối 10, buổi sáng</p>
+        <div className="preview-checklist">
+          <div><span className="check-mark">&#10003;</span><b>Nề nếp đầu giờ</b></div>
+          <div><span className="check-mark">&#10003;</span><b>Vệ sinh lớp học</b></div>
+          <div><span className="check-mark check-mark--muted">&#10003;</span><b>Minh chứng đính kèm</b></div>
+        </div>
+        <div className="preview-person">
+          <span className="person-initials">CD</span>
+          <span>Cờ đỏ đã xác nhận</span>
+        </div>
+      </section>
+
+      <section className="preview-card preview-card--summary">
+        <div className="preview-topbar">
+          <span className="preview-chip">Tổng kết tuần</span>
+          <span className="more-mark">...</span>
+        </div>
+        <h3>Bảng xếp hạng</h3>
+        <div className="ranking-list">
+          <div><span>1</span><b>10A1</b><i className="rank-bar rank-bar--wide" /></div>
+          <div><span>2</span><b>11A3</b><i className="rank-bar rank-bar--medium" /></div>
+          <div><span>3</span><b>12A2</b><i className="rank-bar rank-bar--short" /></div>
+        </div>
+        <div className="preview-alert">Đủ điều kiện tổng kết</div>
+      </section>
+
+      <section className="preview-card preview-card--governance">
+        <div className="preview-topbar">
+          <span className="preview-chip">Kiểm soát dữ liệu</span>
+          <span className="lock-text">Khóa</span>
+        </div>
+        <h3>Chu kỳ tháng</h3>
+        <div className="cycle-path" aria-hidden="true"><i /><i /><i /><i /></div>
+        <div className="governance-list">
+          <span><b>Phiếu trực</b><em>Đã đối chiếu</em></span>
+          <span><b>Ký xác nhận</b><em>Đủ vai trò</em></span>
+          <span><b>Khóa dữ liệu</b><em>Sẵn sàng</em></span>
+        </div>
+      </section>
     </div>
   )
 }
 
+function FeatureVisual({ kind }) {
+  if (kind === 'duty') {
+    return <div className="feature-visual feature-visual--duty" aria-hidden="true"><span>Phiếu trực</span><i /><i /><i /></div>
+  }
+
+  if (kind === 'rules') {
+    return <div className="feature-visual feature-visual--rules" aria-hidden="true"><b>Quy chế</b><span>Điểm cộng trừ</span><span>Vai trò xác nhận</span></div>
+  }
+
+  if (kind === 'summary') {
+    return <div className="feature-visual feature-visual--summary" aria-hidden="true"><div><b>Tuần</b><i /></div><div><b>Tháng</b><i /></div><div><b>Học kỳ</b><i /></div></div>
+  }
+
+  return <div className="feature-visual feature-visual--history" aria-hidden="true"><span /><span /><span /><span /></div>
+}
+
 function App() {
+  const [menuOpen, setMenuOpen] = useState(false)
+  const heroArtRef = useRef(null)
+  const parallaxFrame = useRef(null)
+  const scrollFrame = useRef(null)
+  const closeMenu = () => setMenuOpen(false)
+
+  const setHeroParallax = (x = 0, y = 0) => {
+    if (!heroArtRef.current) return
+
+    cancelAnimationFrame(parallaxFrame.current)
+    parallaxFrame.current = requestAnimationFrame(() => {
+      heroArtRef.current.style.setProperty('--parallax-x', `${x.toFixed(2)}px`)
+      heroArtRef.current.style.setProperty('--parallax-y', `${y.toFixed(2)}px`)
+    })
+  }
+
+  const handleHeroPointerMove = (event) => {
+    if (!window.matchMedia('(min-width: 821px)').matches) return
+    const bounds = event.currentTarget.getBoundingClientRect()
+    const x = ((event.clientX - bounds.left) / bounds.width - 0.5) * 12
+    const y = ((event.clientY - bounds.top) / bounds.height - 0.5) * 10
+    setHeroParallax(x, y)
+  }
+
+  useEffect(() => {
+    const media = window.matchMedia('(max-width: 820px)')
+    const sync = () => {
+      if (!media.matches) setMenuOpen(false)
+    }
+
+    sync()
+    media.addEventListener('change', sync)
+    return () => media.removeEventListener('change', sync)
+  }, [])
+
+  useEffect(() => {
+    document.body.classList.toggle('menu-is-open', menuOpen)
+    return () => document.body.classList.remove('menu-is-open')
+  }, [menuOpen])
+
+  useEffect(() => () => cancelAnimationFrame(parallaxFrame.current), [])
+
+  useEffect(() => {
+    const targets = document.querySelectorAll('[data-scroll-parallax]')
+    const update = () => {
+      const viewportCenter = window.innerHeight / 2
+      targets.forEach((target) => {
+        const bounds = target.getBoundingClientRect()
+        const distance = (viewportCenter - (bounds.top + bounds.height / 2)) / window.innerHeight
+        target.style.setProperty('--scroll-shift', `${Math.max(-14, Math.min(14, distance * 20)).toFixed(2)}px`)
+      })
+    }
+    const onScroll = () => {
+      cancelAnimationFrame(scrollFrame.current)
+      scrollFrame.current = requestAnimationFrame(update)
+    }
+
+    update()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll)
+    return () => {
+      cancelAnimationFrame(scrollFrame.current)
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+    }
+  }, [])
+
+  useEffect(() => {
+    const targets = document.querySelectorAll('.role-strip, .section, .site-footer')
+
+    if (typeof IntersectionObserver === 'undefined') {
+      targets.forEach((target) => target.classList.add('is-visible'))
+      return undefined
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return
+        entry.target.classList.add('is-visible')
+        observer.unobserve(entry.target)
+      })
+    }, { threshold: 0.14, rootMargin: '0px 0px -8% 0px' })
+
+    targets.forEach((target) => observer.observe(target))
+    return () => observer.disconnect()
+  }, [])
+
   return (
     <div className="app-root">
       <a className="skip-link" href="#main">Bỏ qua đến nội dung</a>
-      <Hero />
+      <header className="site-header">
+        <div className="container nav-shell">
+          <a className="brand-lockup" href="#main" aria-label="EduDiscipline Platform, về đầu trang">
+            <img src="/assets/logo.png" alt="" />
+            <span><b>EduDiscipline</b> Platform</span>
+          </a>
+
+          <nav id="primary-navigation" className={`primary-nav ${menuOpen ? 'is-open' : ''}`} aria-label="Điều hướng chính">
+            <a href="#san-pham" onClick={closeMenu}>Sản phẩm</a>
+            <a href="#quy-trinh" onClick={closeMenu}>Giải pháp</a>
+            <a href="#loi-ich" onClick={closeMenu}>Đối tượng</a>
+            <a href="#faq" onClick={closeMenu}>Hỗ trợ</a>
+            <a className="nav-mobile-cta" href={CONTACT_EMAIL_HREF} onClick={closeMenu}>Đặt lịch tư vấn <Arrow /></a>
+          </nav>
+
+          <div className="nav-actions">
+            <a className="nav-login" href={CONTACT_EMAIL_HREF}>Liên hệ</a>
+            <a className="button button-primary button-small" href={CONTACT_EMAIL_HREF}>Đặt lịch tư vấn <Arrow /></a>
+          </div>
+
+          <button
+            className={`menu-toggle ${menuOpen ? 'is-open' : ''}`}
+            type="button"
+            onClick={() => setMenuOpen((open) => !open)}
+            aria-expanded={menuOpen}
+            aria-controls="primary-navigation"
+          >
+            <span className="menu-bar" aria-hidden="true" />
+            <span className="menu-bar" aria-hidden="true" />
+            <span className="menu-bar" aria-hidden="true" />
+            <b className="sr-only">{menuOpen ? 'Đóng menu' : 'Mở menu'}</b>
+          </button>
+        </div>
+      </header>
+      <button className={`menu-backdrop ${menuOpen ? 'is-open' : ''}`} type="button" aria-label="Close menu" onClick={closeMenu} />
+
       <main id="main">
-        <section className="trust-strip" aria-label="Các vai trò sử dụng EduDiscipline Platform">
-          <div className="container trust-inner">
-            <span>Xây dựng cho nhịp vận hành thật của trường THPT</span>
-            <div><b>Ban giám hiệu</b><b>Giáo viên chủ nhiệm</b><b>Ban cán sự</b><b>Cờ đỏ</b><b>Quản trị viên</b></div>
-          </div>
-        </section>
-
-        <section className="section intro-section">
-          <div className="container intro-grid">
-            <Reveal>
-              <p className="section-label">01 / Tư duy sản phẩm</p>
-              <h2 className="display-title">EDP bán một quy trình đáng tin, không bán một màn hình tổng quan.</h2>
-            </Reveal>
-            <Reveal variant="slide">
-              <p className="intro-copy">
-                Điểm thi đua chỉ có giá trị khi nhà trường biết nó đến từ phiếu nào, ai đã xác nhận,
-                kỳ nào đã tổng kết và thời điểm nào dữ liệu được khóa. Vì vậy landing mới bắt đầu bằng
-                luồng nghiệp vụ, rồi mới nói đến báo cáo.
-              </p>
-              <a className="text-link arrow-bearing" href="#workflow">Xem luồng nghiệp vụ <ArrowIcon /></a>
-            </Reveal>
-          </div>
-        </section>
-
-        <section id="benefits" className="section modules-section">
-          <div className="container">
-            <Reveal>
-              <div className="section-topline">
-                <div>
-                  <p className="section-label">02 / Nền tảng vận hành</p>
-                  <h2 className="section-heading-large">Các phân hệ được đặt quanh quy trình.</h2>
-                </div>
-                <p>Không tách rời thành các tính năng rời rạc. Mỗi phân hệ phục vụ một bước trong chuỗi ghi nhận, đối chiếu, tổng kết và khóa dữ liệu.</p>
+        <section className="hero-section" onPointerMove={handleHeroPointerMove} onPointerLeave={() => setHeroParallax()}>
+          <div className="hero-halo hero-halo--one" aria-hidden="true" />
+          <div className="hero-halo hero-halo--two" aria-hidden="true" />
+          <div className="container hero-grid">
+            <div className="hero-copy">
+              <p className="hero-kicker">Nền tảng quản lý nề nếp cho trường THPT</p>
+              <h1>
+                <span className="hero-title-phrase">Quản lý nề nếp.</span>{' '}
+                <span className="hero-title-phrase hero-title-phrase--accent">Đồng bộ.</span>{' '}
+                <span className="hero-title-phrase">Minh bạch.</span>
+              </h1>
+              <p className="hero-lead">EDP số hóa phiếu trực, tổng kết và xếp hạng để nhà trường theo dõi mọi thay đổi đúng quy trình.</p>
+              <div className="hero-actions">
+                <a className="button button-primary" href={CONTACT_EMAIL_HREF}>Đặt lịch tư vấn <Arrow /></a>
+                <a className="button button-secondary" href="#san-pham">Khám phá nền tảng <Arrow /></a>
               </div>
-            </Reveal>
-            <Features />
-          </div>
-        </section>
-
-        <section id="workflow" className="section workflow-section">
-          <div className="container">
-            <Reveal>
-              <div className="section-topline">
-                <div>
-                  <p className="section-label">03 / Quy trình chính</p>
-                  <h2 className="section-heading-large">Từ Cờ đỏ đến xếp hạng, không mất dấu ở giữa.</h2>
-                </div>
-                <p>Luồng này là câu chuyện chính của sản phẩm. Người xem có thể hiểu EDP làm gì trong vài giây đầu tiên.</p>
-              </div>
-            </Reveal>
-            <div className="workflow-list">
-              {workflowSteps.map(([number, title, description, tag], index) => (
-                <Reveal key={number} variant={index % 2 ? 'slide' : 'rise'}>
-                  <article className="workflow-card">
-                    <span className="workflow-number">{number}</span>
-                    <span className="workflow-tag">{tag}</span>
-                    <div>
-                      <h3>{title}</h3>
-                      <p>{description}</p>
-                    </div>
-                    {index < workflowSteps.length - 1 && <ArrowIcon className="workflow-arrow" />}
-                  </article>
-                </Reveal>
-              ))}
             </div>
+            <div className="hero-art-parallax" ref={heroArtRef}><ProductPreview /></div>
           </div>
         </section>
 
-        <section className="section governance-section">
-          <div className="container governance-grid">
-            <Reveal>
-              <div>
-                <p className="section-label">04 / Minh bạch vận hành</p>
-                <h2 className="display-title">Mỗi kết quả đều cần hồ sơ đi kèm.</h2>
-                <p className="section-copy">EDP giúp nhà trường chuyển quy trình giấy tờ thành dữ liệu có cấu trúc, nhưng vẫn giữ logic quen thuộc: có phiếu, có xác nhận, có tổng kết và có khóa.</p>
-              </div>
-            </Reveal>
-            <Reveal variant="scale">
-              <EvidenceBoard />
-            </Reveal>
-          </div>
-          <div className="container governance-points">
-            {governancePoints.map(([title, description]) => (
-              <article key={title}>
-                <h3>{title}</h3>
-                <p>{description}</p>
-              </article>
-            ))}
+        <section className="role-strip motion-role" aria-label="Các vai trò sử dụng EduDiscipline Platform">
+          <div className="container role-strip-inner">
+            <p>Được thiết kế cho nhịp vận hành thực tế của trường THPT</p>
+            <div><b>Ban giám hiệu</b><b>Giáo viên chủ nhiệm</b><b>Ban cán sự</b><b>Cờ đỏ</b></div>
           </div>
         </section>
 
-        <section className="section roles-section">
+        <section id="san-pham" className="section product-section motion-product">
           <div className="container">
-            <Reveal>
-              <div className="section-topline">
-                <div>
-                  <p className="section-label">05 / Theo vai trò nhà trường</p>
-                  <h2 className="section-heading-large">Ai làm phần đó, thấy phần đó.</h2>
-                </div>
-                <p>Trang không hứa hẹn “AI magic”. Nó làm rõ trách nhiệm của từng vai trò trong một quy trình giáo dục có kiểm soát.</p>
-              </div>
-            </Reveal>
-            <div className="role-grid">
-              {roleCards.map(([title, description]) => (
-                <article key={title}>
-                  <h3>{title}</h3>
-                  <p>{description}</p>
+            <div className="section-heading section-heading--product">
+              <p className="eyebrow">Một nền tảng, một nguồn dữ liệu</p>
+              <h2>Từ việc ghi nhận đến lúc tổng kết.</h2>
+              <p>EDP đặt các phần việc theo đúng thứ tự nhà trường cần dùng mỗi ngày.</p>
+            </div>
+            <div className="product-grid">
+              {productCards.map((item) => (
+                <article className={`product-card product-card--${item.kind}`} key={item.title}>
+                  <FeatureVisual kind={item.kind} />
+                  <div className="product-card-copy">
+                    <p>{item.eyebrow}</p>
+                    <h3>{item.title}</h3>
+                    <span>{item.copy}</span>
+                  </div>
+                  <a className="text-link" href="#quy-trinh">Tìm hiểu thêm <Arrow /></a>
                 </article>
               ))}
             </div>
           </div>
         </section>
 
-        <section id="implementation" className="section implementation-section">
-          <div className="container implementation-grid-new">
-            <Reveal>
-              <p className="section-label">06 / Cấu hình theo trường</p>
-              <h2 className="section-heading-large">Tôn trọng cách trường đang vận hành.</h2>
-              <p className="section-copy">EduDiscipline Platform không thay thế quy chế của nhà trường. Hệ thống đưa quy định, khung thời gian và phân quyền vào một luồng số hóa rõ ràng.</p>
-              <a className="text-link arrow-bearing" href={CONTACT_EMAIL_HREF}>Trao đổi về cấu hình <ArrowIcon /></a>
-            </Reveal>
-            <Reveal variant="slide">
-              <div className="deployment-steps">
-                <div><span>01</span><b>Xác lập thời gian</b><p>Năm học, học kỳ, tháng và tuần.</p></div>
-                <div><span>02</span><b>Cấu hình quy chế</b><p>Danh mục lỗi, điểm cộng trừ và quy định.</p></div>
-                <div><span>03</span><b>Phân quyền vận hành</b><p>Đúng vai trò, đúng phạm vi dữ liệu.</p></div>
-                <div><span>04</span><b>Chốt chu kỳ</b><p>Rà soát, tổng kết, khóa và xuất báo cáo.</p></div>
-              </div>
-            </Reveal>
-          </div>
-        </section>
-
-        <section className="section pricing-section">
-          <div className="container"><Pricing /></div>
-        </section>
-
-        <section className="section faq-section" id="faq">
-          <div className="container faq-layout">
-            <Reveal>
-              <div>
-                <p className="section-label">07 / Câu hỏi thường gặp</p>
-                <h2 className="section-heading-large">Rõ trước khi triển khai.</h2>
-              </div>
-            </Reveal>
-            <div className="faq-list">
-              {faqs.map(([question, answer]) => (
-                <details key={question}>
-                  <summary>{question}<span>+</span></summary>
-                  <p>{answer}</p>
-                </details>
+        <section id="quy-trinh" className="section process-section motion-process">
+          <div className="container process-layout">
+            <div className="section-heading section-heading--compact">
+              <h2>Quy trình rõ ràng cho từng vai trò.</h2>
+              <p>Không thay đổi cách trường đang làm. EDP đưa các bước vào cùng một luồng có thể theo dõi.</p>
+              <a className="button button-primary" href={CONTACT_EMAIL_HREF}>Trao đổi về cấu hình <Arrow /></a>
+            </div>
+            <ol className="process-list">
+              {workflow.map((item, index) => (
+                <li key={item.title}>
+                  <span>{`0${index + 1}`}</span>
+                  <div><h3>{item.title}</h3><p>{item.copy}</p></div>
+                </li>
               ))}
+            </ol>
+          </div>
+        </section>
+
+        <section id="loi-ich" className="section benefits-section motion-benefits" data-scroll-parallax>
+          <div className="container benefits-layout">
+            <div className="evidence-panel" aria-label="Minh họa thông tin được đối chiếu và khóa dữ liệu">
+              <div className="evidence-panel-head"><span>Hồ sơ tổng kết</span><b>Đã đối chiếu</b></div>
+              <div className="evidence-rows">
+                <div><span>Phiếu trực</span><b>Đầy đủ minh chứng</b><i>&#10003;</i></div>
+                <div><span>Ký xác nhận</span><b>Đúng vai trò</b><i>&#10003;</i></div>
+                <div><span>Tổng kết</span><b>Sẵn sàng khóa</b><i>&#10003;</i></div>
+              </div>
+              <div className="evidence-lock"><span className="lock-label">Khóa</span><div><b>Khóa dữ liệu theo kỳ</b><p>Giữ nguyên lịch sử sau khi chốt.</p></div></div>
+            </div>
+            <div className="benefits-copy">
+              <p className="eyebrow">Mọi người nhìn cùng một dữ liệu</p>
+              <h2>Đối chiếu dễ hơn, ra quyết định chắc hơn.</h2>
+              <p>Nhà trường biết kết quả đến từ đâu, ai đã xác nhận và thời điểm nào dữ liệu được khóa.</p>
+              <div className="role-grid">
+                {roles.map(([role, copy]) => <article key={role}><h3>{role}</h3><p>{copy}</p></article>)}
+              </div>
             </div>
           </div>
         </section>
 
-        <section className="section final-cta">
-          <div className="container final-cta-inner">
-            <div>
-              <p className="section-label">Bắt đầu từ quy trình hiện có</p>
-              <h2 className="display-title">Đưa nề nếp học đường vào một luồng có thể kiểm chứng.</h2>
-            </div>
-            <div>
-              <p>Chia sẻ cách trường đang ghi nhận, xác nhận và tổng hợp thi đua. Chúng tôi sẽ cùng bạn phác thảo cấu hình phù hợp.</p>
-              <div className="cta-actions">
-                <a className="button button-primary arrow-bearing" href={CONTACT_EMAIL_HREF}>Đặt lịch tư vấn <ArrowIcon /></a>
-                <a className="button button-secondary arrow-bearing" href={CONTACT_PHONE_HREF}>Gọi tư vấn <ArrowIcon /></a>
-              </div>
+        <section className="section callout-section motion-callout">
+          <div className="container callout-inner">
+            <div><h2>Đưa quy trình về đúng một nơi.</h2></div>
+            <div><p>Chúng tôi cùng nhà trường xác định quy chế, luồng xác nhận và cách triển khai phù hợp.</p><a className="button button-primary" href={CONTACT_EMAIL_HREF}>Đặt lịch tư vấn <Arrow /></a></div>
+          </div>
+        </section>
+
+        <section id="faq" className="section faq-section motion-faq">
+          <div className="container faq-layout">
+            <div className="section-heading section-heading--compact"><h2>Những điều nhà trường thường hỏi.</h2></div>
+            <div className="faq-list">
+              {faqs.map(([question, answer]) => <details key={question}><summary>{question}<span>+</span></summary><p>{answer}</p></details>)}
             </div>
           </div>
         </section>
       </main>
-      <Footer />
+
+      <footer className="site-footer motion-footer">
+        <div className="container footer-grid">
+          <div className="footer-brand">
+            <a className="brand-lockup" href="#main" aria-label="EduDiscipline Platform, về đầu trang"><img src="/assets/logo.png" alt="" /><span><b>EduDiscipline</b> Platform</span></a>
+            <p>Số hóa công tác thi đua và nề nếp học đường theo quy trình của từng trường THPT.</p>
+          </div>
+          <div className="footer-column"><h3>Khám phá</h3><a href="#san-pham">Sản phẩm</a><a href="#quy-trinh">Giải pháp</a><a href="#loi-ich">Đối tượng</a><a href="#faq">Hỗ trợ</a></div>
+          <div className="footer-column"><h3>Liên hệ</h3><a href={CONTACT_EMAIL_HREF}>{CONTACT_EMAIL}</a><a href={CONTACT_PHONE_HREF}>+84 865 916 475</a><span>EduDiscipline Platform</span></div>
+        </div>
+        <div className="container footer-bottom"><span>Copyright {new Date().getFullYear()} EduDiscipline Platform</span><span>Bảo mật và điều khoản</span></div>
+      </footer>
     </div>
   )
 }
