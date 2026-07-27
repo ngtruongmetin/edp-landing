@@ -3,19 +3,19 @@ import { CONTACT_EMAIL_HREF } from '../config/contact'
 import ArrowIcon from './ArrowIcon'
 
 const navItems = [
-  ['Nền tảng', '#benefits'],
+  ['Vai trò', '#benefits'],
   ['Quy trình', '#workflow'],
   ['Triển khai', '#implementation'],
   ['FAQ', '#faq'],
 ]
 
 const heroFlow = [
-  ['01', 'Cờ đỏ', 'Ghi nhận nề nếp'],
-  ['02', 'Phiếu trực', 'Lập phiếu theo quy định'],
-  ['03', 'Ký xác nhận', 'Đối chiếu đúng vai trò'],
-  ['04', 'Tổng kết', 'Tính điểm theo kỳ'],
-  ['05', 'Khóa dữ liệu', 'Niêm phong kết quả'],
-  ['06', 'Xếp hạng', 'Công bố minh bạch'],
+  ['01', 'Cờ đỏ', 'Ghi nhận vi phạm'],
+  ['02', 'Phiếu trực', 'Lập theo lịch phân công'],
+  ['03', 'Ký xác nhận', 'Xác nhận phiếu trực'],
+  ['04', 'Tổng kết', 'Tổng hợp theo từng kỳ'],
+  ['05', 'Chốt dữ liệu', 'Sau khi rà soát'],
+  ['06', 'Xếp hạng', 'Từ kết quả tổng hợp'],
 ]
 
 export default function Hero() {
@@ -55,11 +55,10 @@ export default function Hero() {
       <div className="container hero-shell">
         <div className="hero-copy-new">
           <div className="status-line"><i /> Quy trình thi đua và nề nếp cho trường THPT</div>
-          <h1>Quy trình rõ. Dữ liệu có dấu vết.</h1>
+          <h1>Quy trình rõ. Dữ liệu dễ đối chiếu.</h1>
           <p>
-            EduDiscipline Platform số hóa toàn bộ luồng thi đua: từ Cờ đỏ ghi nhận, phiếu trực,
-            ký xác nhận, tổng kết, khóa dữ liệu đến xếp hạng. Dashboard chỉ là kết quả cuối cùng
-            của một quy trình được chuẩn hóa.
+            EduDiscipline Platform số hóa quy trình thi đua: từ Cờ đỏ ghi nhận, phiếu trực,
+            ký xác nhận, tổng kết, chốt dữ liệu đến xếp hạng theo từng kỳ.
           </p>
           <div className="hero-actions">
             <a className="button button-primary arrow-bearing" href={CONTACT_EMAIL_HREF}>
@@ -70,17 +69,17 @@ export default function Hero() {
             </a>
           </div>
           <div className="hero-proof">
-            <span><strong>Theo quy chế</strong> cấu hình cho từng trường</span>
-            <span><strong>Có xác nhận</strong> theo vai trò vận hành</span>
-            <span><strong>Có khóa</strong> để bảo toàn kết quả</span>
+            <span><strong>Theo quy định</strong> của từng trường</span>
+            <span><strong>Có ký xác nhận</strong> trên phiếu trực</span>
+            <span><strong>Chốt theo kỳ</strong> sau khi rà soát</span>
           </div>
         </div>
 
-        <div className="hero-art" role="img" aria-label="Luồng nghiệp vụ từ Cờ đỏ, phiếu trực, ký xác nhận, tổng kết, khóa dữ liệu đến xếp hạng">
+        <div className="hero-art" role="img" aria-label="Luồng nghiệp vụ từ Cờ đỏ, phiếu trực, ký xác nhận, tổng kết, chốt dữ liệu đến xếp hạng">
           <div className="process-ledger">
             <div className="ledger-head">
               <span>Sổ quy trình thi đua</span>
-              <b>Năm học 2026</b>
+              <b>Theo năm học</b>
             </div>
             <ol className="hero-process">
               {heroFlow.map(([number, title, description], index) => (
@@ -95,7 +94,7 @@ export default function Hero() {
               ))}
             </ol>
             <div className="ledger-seal">
-              <span>Đã khóa</span>
+              <span>Đã chốt</span>
               <b>Truy vết được</b>
             </div>
           </div>

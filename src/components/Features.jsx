@@ -2,10 +2,10 @@ import React from 'react'
 import ArrowIcon from './ArrowIcon'
 
 const features = [
-  ['01', 'Phiếu trực điện tử', 'Ghi nhận nề nếp, vi phạm, minh chứng và điểm cộng trừ theo đúng danh mục lỗi.', 'PT'],
-  ['02', 'Quy chế và thang điểm', 'Thiết lập năm học, học kỳ, tuần, lớp, lỗi vi phạm và cách tính điểm riêng của trường.', 'QC'],
+  ['01', 'Phiếu trực điện tử', 'Ghi nhận vi phạm theo danh mục, thêm ảnh minh chứng khi cần và ký xác nhận phiếu trực.', 'PT'],
+  ['02', 'Quy định và thang điểm', 'Thiết lập năm học, học kỳ, tháng, tuần, lớp, lịch trực và cách tính điểm của trường.', 'QD'],
   ['03', 'Ký xác nhận và khóa', 'Mỗi bước đối chiếu có trạng thái, người thực hiện và lịch sử trước khi khóa dữ liệu.', 'KX'],
-  ['04', 'Tổng kết và báo cáo', 'Tự động tổng hợp, xếp hạng và xuất báo cáo theo tuần, tháng, học kỳ hoặc năm học.', 'TK'],
+  ['04', 'Tổng kết và báo cáo', 'Tổng hợp, xếp hạng và xuất báo cáo Excel theo tuần, tháng, học kỳ hoặc năm học.', 'TK'],
 ]
 
 export default function Features() {

@@ -51,7 +51,7 @@ button { font: inherit; }
 .button:hover .button-arrow, .text-link:hover .button-arrow { transform: translateX(3px); }
 .menu-toggle, .nav-mobile-cta { display: none; }
 
-.hero-section { position: relative; isolation: isolate; min-height: 600px; padding: 86px 0 72px; background: linear-gradient(140deg, #fff 0%, #fff 63%, #f5f9ff 100%); }
+.hero-section { position: relative; isolation: isolate; min-height: 620px; padding: 78px 0 82px; background: linear-gradient(140deg, #fff 0%, #fff 62%, #f5f9ff 100%); }
 .hero-halo { position: absolute; z-index: -1; border-radius: 999px; filter: blur(2px); pointer-events: none; }
 .hero-halo--one { top: -280px; right: -240px; width: 720px; height: 720px; border: 1px solid #d5e4ff; background: radial-gradient(circle at 35% 43%, rgba(147, 191, 255, 0.22), rgba(255, 255, 255, 0) 58%); }
 .hero-halo--two { right: 18%; bottom: -360px; width: 560px; height: 560px; border: 1px solid rgba(200, 220, 250, 0.7); }
@@ -59,13 +59,13 @@ button { font: inherit; }
 .hero-copy { position: relative; z-index: 2; max-width: 540px; animation: hero-in 600ms cubic-bezier(0.16, 1, 0.3, 1) both; }
 .hero-kicker { margin: 0 0 16px; color: var(--blue); font-size: 0.82rem; font-weight: 800; line-height: 1.35; }
 .eyebrow { margin: 0 0 16px; color: var(--blue); font-size: 0.76rem; font-weight: 800; line-height: 1.35; text-transform: uppercase; letter-spacing: 0.06em; }
-.hero-copy h1 { max-width: 11ch; margin: 0; color: var(--ink); font-size: clamp(3.2rem, 5.1vw, 4.85rem); font-weight: 800; letter-spacing: 0; line-height: 1.04; }
+.hero-copy h1 { max-width: 11ch; margin: 0; color: var(--ink); font-size: clamp(3.2rem, 5.1vw, 4.85rem); font-weight: 800; letter-spacing: 0; line-height: 1.08; text-wrap: balance; }
 .hero-copy h1 span { color: var(--blue); }
 .hero-lead { max-width: 46ch; margin: 24px 0 30px; color: var(--ink-soft); font-size: 1.04rem; line-height: 1.75; }
 .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; }
 
 .preview-rail { position: relative; min-height: 438px; padding: 10px 30px 0 0; transform: rotate(-7deg); transform-origin: center; animation: preview-in 720ms 120ms cubic-bezier(0.16, 1, 0.3, 1) both; }
-.preview-card { position: absolute; overflow: hidden; padding: 20px; border: 1px solid rgba(204, 218, 241, 0.95); border-radius: var(--radius); background: rgba(255, 255, 255, 0.98); box-shadow: var(--shadow); }
+.preview-card { position: absolute; overflow: hidden; padding: 20px; border: 1px solid rgba(191, 211, 242, 0.95); border-radius: var(--radius); background: rgba(255, 255, 255, 0.98); box-shadow: var(--shadow); }
 .preview-card--duty { z-index: 3; top: 10px; left: 22px; width: 230px; min-height: 326px; }
 .preview-card--summary { z-index: 2; top: 116px; left: 242px; width: 218px; min-height: 282px; }
 .preview-card--governance { z-index: 1; top: 4px; right: 6px; width: 207px; min-height: 300px; }
@@ -147,16 +147,17 @@ button { font: inherit; }
 .primary-nav > a { position: relative; }
 .primary-nav > a::after { position: absolute; right: 0; bottom: -7px; left: 0; height: 2px; background: var(--blue); content: ''; transform: scaleX(0); transform-origin: right; transition: transform 220ms ease; }
 .primary-nav > a:hover::after { transform: scaleX(1); transform-origin: left; }
+.button:focus-visible, .primary-nav > a:focus-visible, .nav-login:focus-visible, .menu-toggle:focus-visible, .text-link:focus-visible, .footer-column a:focus-visible { outline: 3px solid rgba(34, 104, 229, 0.28); outline-offset: 3px; }
 .hero-copy { animation: none; }
 .hero-copy h1 span { color: inherit; }
 .hero-copy h1 .hero-title-phrase--accent { color: var(--blue); }
-.hero-title-phrase { display: inline-block; animation: title-mask-in 720ms cubic-bezier(0.16, 1, 0.3, 1) both; }
-.hero-title-phrase:nth-child(2) { animation-delay: 130ms; }
-.hero-title-phrase:nth-child(3) { animation-delay: 260ms; }
-.hero-kicker { animation: soft-focus-in 520ms 40ms cubic-bezier(0.16, 1, 0.3, 1) both; }
-.hero-lead { animation: soft-focus-in 620ms 390ms cubic-bezier(0.16, 1, 0.3, 1) both; }
-.hero-actions { animation: soft-focus-in 620ms 480ms cubic-bezier(0.16, 1, 0.3, 1) both; }
-.hero-art-parallax { min-width: 0; transform: translate3d(var(--parallax-x, 0), var(--parallax-y, 0), 0); transition: transform 260ms cubic-bezier(0.16, 1, 0.3, 1); will-change: transform; }
+.hero-title-phrase { display: inline; clip-path: none; filter: none; opacity: 1; transform: none; }
+.hero-kicker { animation: soft-focus-in 850ms 60ms cubic-bezier(0.16, 1, 0.3, 1) both; }
+.hero-lead { animation: soft-focus-in 920ms 480ms cubic-bezier(0.16, 1, 0.3, 1) both; }
+.hero-actions { animation: soft-focus-in 900ms 600ms cubic-bezier(0.16, 1, 0.3, 1) both; }
+.hero-grid { position: relative; }
+.hero-copy { z-index: 3; }
+.hero-art-parallax { position: relative; z-index: 1; min-width: 0; transform: translate3d(var(--parallax-x, 0), var(--parallax-y, 0), 0); transition: transform 260ms cubic-bezier(0.16, 1, 0.3, 1); will-change: transform; }
 .hero-halo { will-change: transform; animation: halo-drift 18s ease-in-out infinite; }
 .hero-halo--two { animation-delay: -8s; }
 .preview-card { will-change: transform; }
@@ -187,9 +188,57 @@ button { font: inherit; }
 .motion-footer.is-visible .footer-grid { animation: footer-in 660ms cubic-bezier(0.16, 1, 0.3, 1) both; }
 .motion-footer.is-visible .footer-bottom { animation: footer-in 520ms 150ms cubic-bezier(0.16, 1, 0.3, 1) both; }
 
+/* Stateful scroll reveals can run forward and smoothly reverse when a section leaves the view. */
+html.motion-ready { --reveal-ease: cubic-bezier(0.22, 1.1, 0.36, 1); }
+html.motion-ready .motion-role > .role-strip-inner,
+html.motion-ready .motion-product .section-heading,
+html.motion-ready .motion-process .section-heading,
+html.motion-ready .motion-benefits .benefits-copy,
+html.motion-ready .motion-faq .faq-layout > div:first-child { opacity: 0; transform: translate3d(0, 22px, 0) scale(0.985); filter: blur(7px); transition: opacity 940ms var(--reveal-ease), transform 980ms var(--reveal-ease), filter 880ms ease; }
+html.motion-ready .motion-role.is-visible > .role-strip-inner,
+html.motion-ready .motion-product.is-visible .section-heading,
+html.motion-ready .motion-process.is-visible .section-heading,
+html.motion-ready .motion-benefits.is-visible .benefits-copy,
+html.motion-ready .motion-faq.is-visible .faq-layout > div:first-child { animation: none; opacity: 1; transform: translate3d(0, 0, 0) scale(1); filter: blur(0); }
+
+html.motion-ready .motion-role .role-strip-inner > div > b { opacity: 0; transform: translate3d(0, 10px, 0) scale(0.96); filter: blur(4px); transition: opacity 820ms var(--reveal-ease), transform 860ms var(--reveal-ease), filter 760ms ease; }
+html.motion-ready .motion-role.is-visible .role-strip-inner > div > b { animation: none; opacity: 1; transform: translate3d(0, 0, 0) scale(1); filter: blur(0); transition-delay: 120ms; }
+html.motion-ready .motion-role.is-visible .role-strip-inner > div > b:nth-child(2) { transition-delay: 210ms; } html.motion-ready .motion-role.is-visible .role-strip-inner > div > b:nth-child(3) { transition-delay: 300ms; } html.motion-ready .motion-role.is-visible .role-strip-inner > div > b:nth-child(4) { transition-delay: 390ms; }
+
+html.motion-ready .motion-product .section-heading { clip-path: inset(0 0 100% 0); transform: translate3d(-24px, 0, 0) scale(0.985); }
+html.motion-ready .motion-product.is-visible .section-heading { clip-path: inset(0 0 0 0); transform: translate3d(0, 0, 0) scale(1); transition: opacity 980ms var(--reveal-ease), transform 1040ms var(--reveal-ease), filter 900ms ease, clip-path 1040ms var(--reveal-ease); }
+html.motion-ready .motion-product .product-card { animation: none; opacity: 0; transform: translate3d(0, 30px, 0) scale(0.955) rotate(-0.8deg); filter: blur(6px); transition: opacity 900ms var(--reveal-ease), transform 1040ms var(--reveal-ease), filter 880ms ease, box-shadow 900ms ease; }
+html.motion-ready .motion-product.is-visible .product-card { opacity: 1; transform: translate3d(0, 0, 0) scale(1) rotate(0); filter: blur(0); box-shadow: var(--shadow); transition-delay: 120ms; }
+html.motion-ready .motion-product.is-visible .product-card:nth-child(2) { transition-delay: 240ms; } html.motion-ready .motion-product.is-visible .product-card:nth-child(3) { transition-delay: 360ms; } html.motion-ready .motion-product.is-visible .product-card:nth-child(4) { transition-delay: 480ms; }
+
+html.motion-ready .motion-process .process-list li { animation: none; opacity: 0; clip-path: inset(0 100% 0 0); transform: translate3d(-24px, 0, 0); filter: blur(5px); transition: opacity 880ms var(--reveal-ease), transform 980ms var(--reveal-ease), filter 840ms ease, clip-path 1000ms var(--reveal-ease); }
+html.motion-ready .motion-process.is-visible .process-list li { opacity: 1; clip-path: inset(0 0 0 0); transform: translate3d(0, 0, 0); filter: blur(0); transition-delay: 140ms; }
+html.motion-ready .motion-process.is-visible .process-list li:nth-child(2) { transition-delay: 280ms; } html.motion-ready .motion-process.is-visible .process-list li:nth-child(3) { transition-delay: 420ms; }
+
+html.motion-ready .motion-benefits .evidence-panel { animation: none; opacity: 0; transform: perspective(900px) rotateX(4deg) translate3d(0, calc(26px + var(--scroll-shift, 0px)), 0) scale(0.97); filter: blur(6px); transition: opacity 960ms var(--reveal-ease), transform 1080ms var(--reveal-ease), filter 920ms ease; }
+html.motion-ready .motion-benefits.is-visible .evidence-panel { opacity: 1; transform: perspective(900px) rotateX(0) translate3d(0, var(--scroll-shift, 0px), 0) scale(1); filter: blur(0); }
+html.motion-ready .motion-benefits .role-grid article { animation: none; opacity: 0; transform: translate3d(0, 14px, 0) scale(0.94); filter: blur(4px); transition: opacity 820ms var(--reveal-ease), transform 920ms var(--reveal-ease), filter 760ms ease; }
+html.motion-ready .motion-benefits.is-visible .role-grid article { opacity: 1; transform: translate3d(0, 0, 0) scale(1); filter: blur(0); transition-delay: 260ms; }
+html.motion-ready .motion-benefits.is-visible .role-grid article:nth-child(2) { transition-delay: 360ms; } html.motion-ready .motion-benefits.is-visible .role-grid article:nth-child(3) { transition-delay: 460ms; } html.motion-ready .motion-benefits.is-visible .role-grid article:nth-child(4) { transition-delay: 560ms; }
+
+html.motion-ready .motion-callout .callout-inner { animation: none; opacity: 0; clip-path: inset(12% 8% 12% 8% round 12px); transform: scale(0.97); filter: blur(7px); transition: opacity 960ms var(--reveal-ease), transform 1040ms var(--reveal-ease), filter 920ms ease, clip-path 1040ms var(--reveal-ease); }
+html.motion-ready .motion-callout.is-visible .callout-inner { opacity: 1; clip-path: inset(0 0 0 0 round 12px); transform: scale(1); filter: blur(0); }
+html.motion-ready .motion-callout .callout-inner > div { animation: none; opacity: 0; transform: translate3d(0, 16px, 0); filter: blur(5px); transition: opacity 840ms var(--reveal-ease), transform 900ms var(--reveal-ease), filter 800ms ease; }
+html.motion-ready .motion-callout.is-visible .callout-inner > div { opacity: 1; transform: translate3d(0, 0, 0); filter: blur(0); transition-delay: 260ms; }
+
+html.motion-ready .motion-faq .faq-list details { animation: none; opacity: 0; clip-path: inset(0 0 100% 0); transform: translate3d(0, 16px, 0) scale(0.985); filter: blur(5px); transition: opacity 860ms var(--reveal-ease), transform 940ms var(--reveal-ease), filter 820ms ease, clip-path 960ms var(--reveal-ease); }
+html.motion-ready .motion-faq.is-visible .faq-list details { opacity: 1; clip-path: inset(0 0 0 0); transform: translate3d(0, 0, 0) scale(1); filter: blur(0); transition-delay: 140ms; }
+html.motion-ready .motion-faq.is-visible .faq-list details:nth-child(2) { transition-delay: 250ms; } html.motion-ready .motion-faq.is-visible .faq-list details:nth-child(3) { transition-delay: 360ms; } html.motion-ready .motion-faq.is-visible .faq-list details:nth-child(4) { transition-delay: 470ms; }
+
+html.motion-ready .motion-footer .footer-grid,
+html.motion-ready .motion-footer .footer-bottom { animation: none; opacity: 0; transform: translate3d(0, 20px, 0); filter: blur(5px); transition: opacity 900ms var(--reveal-ease), transform 980ms var(--reveal-ease), filter 860ms ease; }
+html.motion-ready .motion-footer.is-visible .footer-grid,
+html.motion-ready .motion-footer.is-visible .footer-bottom { opacity: 1; transform: translate3d(0, 0, 0); filter: blur(0); }
+html.motion-ready .motion-footer.is-visible .footer-bottom { transition-delay: 180ms; }
+
 @media (min-width: 821px) {
   .hero-copy h1 { max-width: 14ch; }
-  .hero-title-phrase { white-space: nowrap; }
+  .hero-title-phrase { white-space: normal; }
 }
 
 .menu-backdrop { display: none; }
@@ -223,7 +272,8 @@ button { font: inherit; }
   .hero-section { padding: 44px 0 30px; }
   .hero-grid { gap: 24px; }
   .hero-kicker { max-width: 29ch; margin-bottom: 12px; font-size: 0.68rem; }
-  .hero-copy h1 { font-size: clamp(2.1rem, 10.5vw, 2.75rem); }
+  .hero-copy h1 { max-width: none; font-size: clamp(2.1rem, 10.5vw, 2.75rem); text-wrap: pretty; }
+  .hero-title-phrase { display: contents; }
   .hero-lead { margin: 17px 0 23px; font-size: 0.93rem; line-height: 1.65; }
   .hero-actions { display: grid; grid-template-columns: 1fr; gap: 10px; }
   .hero-actions .button { width: 100%; }
@@ -260,4 +310,5 @@ button { font: inherit; }
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
   .preview-card, .role-strip.is-visible > .role-strip-inner, .section.is-visible .section-heading, .section.is-visible .benefits-copy, .section.is-visible .callout-inner > div, .section.is-visible .faq-layout > div, .section.is-visible .product-card, .section.is-visible .process-list li, .section.is-visible .evidence-panel, .section.is-visible .role-grid article, .section.is-visible .faq-list details, .site-footer.is-visible .footer-grid, .site-footer.is-visible .footer-bottom { animation: none !important; opacity: 1 !important; transform: none !important; }
   .hero-title-phrase, .hero-kicker, .hero-lead, .hero-actions, .hero-halo, .hero-art-parallax, .motion-callout.is-visible .callout-inner, .motion-callout.is-visible .callout-inner > div { animation: none !important; clip-path: none !important; filter: none !important; opacity: 1 !important; transform: none !important; }
+  html.motion-ready .motion-role > .role-strip-inner, html.motion-ready .motion-role .role-strip-inner > div > b, html.motion-ready .motion-product .section-heading, html.motion-ready .motion-product .product-card, html.motion-ready .motion-process .section-heading, html.motion-ready .motion-process .process-list li, html.motion-ready .motion-benefits .benefits-copy, html.motion-ready .motion-benefits .evidence-panel, html.motion-ready .motion-benefits .role-grid article, html.motion-ready .motion-callout .callout-inner, html.motion-ready .motion-callout .callout-inner > div, html.motion-ready .motion-faq .faq-layout > div:first-child, html.motion-ready .motion-faq .faq-list details, html.motion-ready .motion-footer .footer-grid, html.motion-ready .motion-footer .footer-bottom { animation: none !important; clip-path: none !important; filter: none !important; opacity: 1 !important; transform: none !important; transition: none !important; }
 }
