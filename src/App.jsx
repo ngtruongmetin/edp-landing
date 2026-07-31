@@ -268,9 +268,8 @@ function App() {
             <div className="hero-copy">
               <p className="hero-kicker">Nền tảng số hóa thi đua và nề nếp cho trường THPT</p>
               <h1>
-                <span className="hero-title-phrase">Nề nếp rõ ràng.</span>{' '}
-                <span className="hero-title-phrase hero-title-phrase--accent">Dữ liệu nhất quán.</span>{' '}
-                <span className="hero-title-phrase">Dễ đối chiếu.</span>
+                <span className="hero-title-phrase">Chuẩn hóa nề nếp.</span>{' '}
+                <span className="hero-title-phrase hero-title-phrase--accent">Minh bạch thi đua.</span>{' '}
               </h1>
               <p className="hero-lead">EDP kết nối phiếu trực, điểm thi đua, tổng kết và xếp hạng trong một quy trình có thể rà soát theo quy định của từng trường.</p>
               <div className="hero-actions">

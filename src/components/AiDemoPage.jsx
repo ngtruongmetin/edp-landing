@@ -429,6 +429,65 @@ function GvcnReportModal({ loading, onClose, onRegenerate, savedItems }) {
   )
 }
 
+function DraggableAiFab({ onOpenReport }) {
+  const fabRef = useRef(null)
+  const dragRef = useRef({ active: false, moved: false, pointerId: null, x: 0, y: 0, lastX: 0, lastY: 0 })
+
+  const moveFab = (event) => {
+    const button = fabRef.current
+    const drag = dragRef.current
+    if (!button || !drag.active || event.pointerId !== drag.pointerId) return
+
+    const parent = button.parentElement.getBoundingClientRect()
+    const bounds = button.getBoundingClientRect()
+    const nextX = Math.max(parent.left - bounds.left, Math.min(parent.right - bounds.right, drag.x + event.clientX - drag.lastX))
+    const nextY = Math.max(parent.top - bounds.top, Math.min(parent.bottom - bounds.bottom, drag.y + event.clientY - drag.lastY))
+
+    drag.x = nextX
+    drag.y = nextY
+    drag.lastX = event.clientX
+    drag.lastY = event.clientY
+    drag.moved = drag.moved || Math.abs(nextX) > 3 || Math.abs(nextY) > 3
+    button.style.transform = `translate3d(${nextX}px, ${nextY}px, 0)`
+  }
+
+  const stopDrag = (event) => {
+    const button = fabRef.current
+    const drag = dragRef.current
+    if (!button || event.pointerId !== drag.pointerId) return
+    drag.active = false
+    if (button.hasPointerCapture(event.pointerId)) button.releasePointerCapture(event.pointerId)
+  }
+
+  return (
+    <button
+      ref={fabRef}
+      className="edp-gvcn-ai-fab edp-gvcn-ai-fab--draggable"
+      type="button"
+      aria-label="Open AI report. Drag to move."
+      title="Drag to move"
+      onPointerDown={(event) => {
+        if (event.button !== 0) return
+        const drag = dragRef.current
+        drag.active = true
+        drag.moved = false
+        drag.pointerId = event.pointerId
+        drag.lastX = event.clientX
+        drag.lastY = event.clientY
+        event.currentTarget.setPointerCapture(event.pointerId)
+      }}
+      onPointerMove={moveFab}
+      onPointerUp={stopDrag}
+      onPointerCancel={stopDrag}
+      onClick={() => {
+        if (!dragRef.current.moved) onOpenReport()
+      }}
+    >
+      <SparkleIcon /><span>AI</span>
+    </button>
+  )
+}
+
 function GvcnDemo({ savedItems }) {
   const [reportOpen, setReportOpen] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -444,7 +503,7 @@ function GvcnDemo({ savedItems }) {
 
   return (
     <div className="edp-gvcn-app" aria-label="Giao diện phân tích nề nếp dành cho Giáo viên chủ nhiệm">
-      <GvcnNavbar />
+      <DraggableAiFab onOpenReport={openReport} />
       <GvcnDashboardSample onOpenReport={openReport} savedItems={savedItems} />
       {reportOpen ? <GvcnReportModal loading={loading} onClose={() => setReportOpen(false)} onRegenerate={openReport} savedItems={savedItems} /> : null}
     </div>

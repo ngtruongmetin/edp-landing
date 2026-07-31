@@ -1679,6 +1679,155 @@
   }
 }
 
+.demo-experience .demo-container {
+  display: grid;
+  grid-template-columns: 264px minmax(0, 1fr);
+  grid-template-rows: auto 1fr;
+  overflow: hidden;
+  border: 1px solid #dbe5f4;
+  border-radius: 24px;
+  background: #fff;
+  box-shadow: 0 24px 70px rgba(15, 23, 42, 0.1);
+}
+
+.demo-experience .demo-role-switcher {
+  grid-column: 1;
+  grid-row: 1;
+  width: auto;
+  max-width: none;
+  margin: 0;
+  padding: 18px 14px 0;
+  border: 0;
+  border-radius: 0;
+  background: #f8fbff;
+  box-shadow: none;
+}
+
+.demo-experience .demo-role-switcher button {
+  min-height: 68px;
+  border-radius: 12px;
+}
+
+.demo-experience .demo-disclosure {
+  grid-column: 1;
+  grid-row: 2;
+  align-self: end;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 8px;
+  max-width: none;
+  margin: 0;
+  padding: 18px 20px 22px;
+  border-top: 1px solid #dbe5f4;
+  background: #f8fbff;
+  text-align: left;
+}
+
+.demo-experience .demo-product-stage {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  min-width: 0;
+  min-height: 820px;
+  margin: 16px;
+  border-radius: 16px;
+  box-shadow: none;
+}
+
+.edp-codo-header,
+.edp-codo-bottom-nav,
+.edp-gvcn-dashboard .edp-gvcn-ai-fab {
+  display: none;
+}
+
+.edp-codo-shell,
+.edp-gvcn-app {
+  height: 820px;
+}
+
+.edp-codo-scroll {
+  padding: 16px 16px 108px;
+}
+
+.edp-codo-composer {
+  bottom: 0;
+}
+
+.edp-gvcn-ai-fab--draggable {
+  top: auto;
+  right: 24px;
+  bottom: 24px;
+  touch-action: none;
+  user-select: none;
+  cursor: grab;
+  transition: box-shadow 180ms ease, background-color 180ms ease;
+}
+
+.edp-gvcn-ai-fab--draggable:active {
+  cursor: grabbing;
+  box-shadow: 0 10px 28px rgba(46, 119, 223, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.65);
+}
+
+@media (max-width: 700px) {
+  .demo-experience .demo-container {
+    display: block;
+    overflow: visible;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .demo-experience .demo-role-switcher {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin: 0;
+    padding: 5px;
+    border: 1px solid #dbe5f4;
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+  }
+
+  .demo-experience .demo-disclosure {
+    display: none;
+  }
+
+  .demo-experience .demo-product-stage {
+    min-height: 780px;
+    margin: 18px 0 0;
+    border-radius: 20px;
+    box-shadow: 0 24px 70px rgba(15, 23, 42, 0.1);
+  }
+
+  .edp-codo-shell,
+  .edp-gvcn-app {
+    height: 780px;
+  }
+}
+
+@media (max-width: 480px) {
+  .demo-experience .demo-role-switcher {
+    grid-template-columns: 1fr;
+  }
+
+  .demo-experience .demo-product-stage {
+    margin-right: -16px;
+    margin-left: -16px;
+    border-right: 0;
+    border-left: 0;
+    border-radius: 0;
+  }
+
+  .edp-codo-shell,
+  .edp-gvcn-app {
+    height: 760px;
+  }
+
+  .edp-gvcn-ai-fab--draggable {
+    right: 14px;
+    bottom: 14px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .ai-demo-page *,
   .ai-demo-page *::before,
