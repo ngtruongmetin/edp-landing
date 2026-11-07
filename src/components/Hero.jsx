@@ -9,8 +9,8 @@ const highlights = [
 
 const dashboardCards = [
     { label: 'Lớp đang quản lý', value: 41, suffix: '', tone: 'accent' },
-    { label: 'Phiếu trực đã xử lý', value: 1458, suffix: '', tone: 'success' },
-    { label: 'Ngày vận hành', value: 97, suffix: '', tone: 'neutral' },
+    { label: 'Phiếu trực đã xử lý', value: 3348, suffix: '', tone: 'success' },
+    { label: 'Ngày vận hành', value: 225, suffix: '', tone: 'neutral' },
 ]
 
 function useCountUp(target, duration = 1500, active = false) {
